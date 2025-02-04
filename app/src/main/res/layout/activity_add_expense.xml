@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/expense"
+        android:background="@drawable/regular_btn"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Add Expense"
+        android:textSize="50sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        />
+    <EditText
+        android:id="@+id/expenseNameInput"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Expense Name" />
+
+    <EditText
+        android:id="@+id/expenseDescriptionInput"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Description" />
+
+
+    <EditText
+        android:id="@+id/expenseAmountInput"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Amount"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/submitExpenseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/regular_btn"
+        android:textSize="15dp"
+        android:layout_gravity="center"
+        android:text="Submit" />
+</LinearLayout>

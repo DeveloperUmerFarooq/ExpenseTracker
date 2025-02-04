@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/title"
+        android:background="#654EA1"
+        android:padding="5dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Expense Tracker"
+            android:layout_gravity="center"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:layout_marginLeft="20dp"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile"
+            android:src="@drawable/circleuser"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="15dp" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/totalExpenseLabel"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="10dp"
+        android:text="Total Expense"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:textSize="40sp"
+    />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/total"
+        android:text="120"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/totalExpenseLabel"
+        android:textSize="80dp"
+        android:textStyle="bold"
+        android:textColor="#c1121f"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listLabel"
+        android:text="List of Expenses"
+        android:layout_below="@+id/total"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:textSize="40sp"
+        />
+    <ListView
+        android:id="@+id/expenseListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@+id/buttonsLayout"
+        android:layout_below="@+id/listLabel" />
+
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="3dp">
+        <ImageButton
+            android:id="@+id/addExpenseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="@drawable/rounded_button"
+            android:src="@drawable/plus"
+            android:contentDescription="add_button"
+            android:layout_marginEnd="4dp"/>
+        <ImageButton
+            android:id="@+id/deleteExpenseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="@drawable/delete"
+            android:src="@drawable/trash"
+            android:contentDescription="delete_button"
+            android:layout_marginEnd="4dp"/>
+
+        <ImageButton
+            android:id="@+id/exportExpenseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/share"
+            android:contentDescription="export_button"
+            android:padding="8dp"
+            android:src="@drawable/folderup" />
+
+        <ImageButton
+            android:id="@+id/logoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/delete"
+            android:contentDescription="Logout"
+            android:padding="8dp"
+            android:src="@drawable/logout"
+            android:layout_marginEnd="8dp"/>
+    </LinearLayout>
+</RelativeLayout>

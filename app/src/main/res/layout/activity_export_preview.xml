@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/exportView"
+        android:background="#FFFFFF"
+        android:layout_marginTop="20dp">
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_height="150dp"
+            android:layout_width="wrap_content"
+            android:src="@drawable/expense"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            />
+        <TextView
+            android:id="@+id/previewTotalLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logo"
+            android:text="Total Expense"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/previewTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/previewTotalLabel"
+            android:textSize="80sp"
+            android:textStyle="bold"
+            android:textColor="#c1121f"
+            android:gravity="center_horizontal" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/previewTotal"
+            android:text="Expense List"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:gravity="center_horizontal"
+            android:id="@+id/expenseLabel"
+            />
+        <ListView
+            android:id="@+id/previewListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/expenseLabel"
+            />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/exportButtonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="5dp">
+        <Button
+            android:id="@+id/shareImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/regular_btn"
+            android:layout_marginEnd="5dp"
+            android:textSize="15dp"
+            android:text="Share" />
+
+        <Button
+            android:id="@+id/saveImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/regular_btn"
+            android:textSize="15dp"
+            android:text="Save Image" />
+
+    </LinearLayout>
+</RelativeLayout>
