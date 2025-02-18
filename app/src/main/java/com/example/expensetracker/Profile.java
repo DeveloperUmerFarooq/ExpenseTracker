@@ -22,7 +22,7 @@ public class Profile extends AppCompatActivity {
     TextView expense,email,remainingAmountView;
 
     double salary;
-    Button logout;
+    Button logout,back;
     private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,13 @@ public class Profile extends AppCompatActivity {
         email=findViewById(R.id.emailView);
         logout=findViewById(R.id.logout);
         remainingAmountView=findViewById(R.id.remainingAmountView);
+        back=findViewById(R.id.back);
         EditText salaryInput=findViewById(R.id.salaryInput);
+
+
+        back.setOnClickListener(v->{
+           this.finish();
+        });
 
         mAuth=FirebaseAuth.getInstance();
         FirebaseUser user=mAuth.getCurrentUser();

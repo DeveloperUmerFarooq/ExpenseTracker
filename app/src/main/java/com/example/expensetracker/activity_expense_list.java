@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,7 +18,6 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 public class activity_expense_list extends AppCompatActivity {
     private static final String SHARED_PREFS = "ExpensePrefs";
     private static final String KEY_EXPENSES = "Expenses";
@@ -28,61 +26,54 @@ public class activity_expense_list extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private ListView expenseListView;
     private TextView totalExpense;
-    private int total=0;
+    private int total = 0;
 
     FirebaseAuth auth;
-    ImageButton logout;
-
+    ImageButton logout, deleteExpenseButton;
     ImageView profile;
     FirebaseUser user;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_list);
 
-        auth=FirebaseAuth.getInstance();
-        logout=findViewById(R.id.logoutButton);
-        user=auth.getCurrentUser();
+        auth = FirebaseAuth.getInstance();
+        logout = findViewById(R.id.logoutButton);
+        user = auth.getCurrentUser();
 
-        if(user==null){
+        if (user == null) {
             Intent intent = new Intent(activity_expense_list.this, Login.class);
             startActivity(intent);
             finish();
         }
 
-
-        logout.setOnClickListener(v->{
+        logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(activity_expense_list.this, Login.class);
             startActivity(intent);
             finish();
         });
 
-
-        profile=findViewById(R.id.profile);
-        profile.setOnClickListener(v->{
-            Intent intent = new Intent(activity_expense_list.this,Profile.class);
+        profile = findViewById(R.id.profile);
+        profile.setOnClickListener(v -> {
+            Intent intent = new Intent(activity_expense_list.this, Profile.class);
             intent.putExtra("total", total);
             startActivity(intent);
         });
 
-
         expenseListView = findViewById(R.id.expenseListView);
         ImageButton addExpenseButton = findViewById(R.id.addExpenseButton);
-        ImageButton deleteExpenseButton = findViewById(R.id.deleteExpenseButton);
-        totalExpense=findViewById(R.id.total);
+        deleteExpenseButton = findViewById(R.id.deleteExpenseButton);
+        totalExpense = findViewById(R.id.total);
 
         expenses = loadExpenses();
         total = loadTotal();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, expenses);
-        
-        String totalAmount =String.valueOf(total);
-        totalExpense.setText(totalAmount);
-        expenseListView.setAdapter(adapter);
-        expenseListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, expenses);
 
+        totalExpense.setText(String.valueOf(total));
+        expenseListView.setAdapter(adapter);
+        expenseListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE); // Enable multiple selection
 
         ImageButton exportExpenseButton = findViewById(R.id.exportExpenseButton);
         exportExpenseButton.setOnClickListener(v -> {
@@ -92,47 +83,57 @@ public class activity_expense_list extends AppCompatActivity {
             startActivity(intent);
         });
 
-
         // Add Expense Button Listener
         addExpenseButton.setOnClickListener(v -> {
             Intent intent = new Intent(activity_expense_list.this, ActivityAddExpense.class);
             startActivityForResult(intent, 1);
         });
 
-        // Delete Expense Button Listener
+        // Multi-Delete Button Listener
         deleteExpenseButton.setOnClickListener(v -> {
-            int position = expenseListView.getCheckedItemPosition();
-            if (position != ListView.INVALID_POSITION) {
-                String expenseItem = expenses.get(position);
-                String[] expenseParts = expenseItem.split(" - ");
+            multiDeleteExpenses();
+        });
+    }
 
+    // Multi-Delete Function
+    private void multiDeleteExpenses() {
+        int count = expenseListView.getCount();
+        ArrayList<String> selectedExpenses = new ArrayList<>();
+        int removedTotal = 0;
+
+        for (int i = count - 1; i >= 0; i--) {
+            if (expenseListView.isItemChecked(i)) {
+                String expenseItem = expenses.get(i);
+                String[] expenseParts = expenseItem.split(" - ");
                 if (expenseParts.length >= 2) {
                     String amountString = expenseParts[1].split("\n")[0].trim();
                     int expenseAmount = Integer.parseInt(amountString);
-                    total -= expenseAmount;
-                    saveTotal(total);
-                    totalExpense.setText(String.valueOf(total));
-
-                    expenses.remove(position);
-                    saveExpenses(expenses);
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(this, "Expense Deleted Successfully!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Invalid expense format!", Toast.LENGTH_SHORT).show();
+                    removedTotal += expenseAmount;
                 }
-            } else {
-                Toast.makeText(this, "Please select an expense to delete.", Toast.LENGTH_SHORT).show();
+                selectedExpenses.add(expenseItem);
             }
-        });
+        }
 
+        if (selectedExpenses.isEmpty()) {
+            Toast.makeText(this, "Please select expenses to delete.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        expenses.removeAll(selectedExpenses);
+        total -= removedTotal;
+        saveExpenses(expenses);
+        saveTotal(total);
+
+        adapter.notifyDataSetChanged();
+        totalExpense.setText(String.valueOf(total));
+        Toast.makeText(this, "Selected Expenses Deleted Successfully!", Toast.LENGTH_SHORT).show();
     }
 
     private ArrayList<String> loadExpenses() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String savedExpenses = sharedPreferences.getString(KEY_EXPENSES, "");
         if (!savedExpenses.isEmpty()) {
-            String[] expenseArray = savedExpenses.split(",");
-            return new ArrayList<>(Arrays.asList(expenseArray));
+            return new ArrayList<>(Arrays.asList(savedExpenses.split(",")));
         }
         return new ArrayList<>();
     }
@@ -140,11 +141,7 @@ public class activity_expense_list extends AppCompatActivity {
     private void saveExpenses(ArrayList<String> expenses) {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        StringBuilder sb = new StringBuilder();
-        for (String expense : expenses) {
-            sb.append(expense).append(",");
-        }
-        editor.putString(KEY_EXPENSES, sb.toString());
+        editor.putString(KEY_EXPENSES, String.join(",", expenses));
         editor.apply();
     }
 
@@ -168,12 +165,11 @@ public class activity_expense_list extends AppCompatActivity {
             expenses.add(expense);
             saveExpenses(expenses);
             adapter.notifyDataSetChanged();
-            String amount = data.getStringExtra("expense-amount");
-            int expenseAmount = Integer.parseInt(amount);
-            total+=expenseAmount;
+            int expenseAmount = Integer.parseInt(data.getStringExtra("expense-amount"));
+            total += expenseAmount;
             saveTotal(total);
             totalExpense.setText(String.valueOf(total));
-            Toast.makeText(this,"New Item Added in List.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "New Item Added in List.", Toast.LENGTH_SHORT).show();
         }
     }
 }

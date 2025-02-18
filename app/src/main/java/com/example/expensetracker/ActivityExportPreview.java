@@ -24,6 +24,8 @@ public class ActivityExportPreview extends AppCompatActivity {
     private TextView previewTotal;
     private RelativeLayout layout;
 
+    Button back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,11 @@ public class ActivityExportPreview extends AppCompatActivity {
         Button saveImageButton = findViewById(R.id.saveImageButton);
         Button shareImageButton = findViewById(R.id.shareImageButton);
         layout = findViewById(R.id.exportView);
+        back=findViewById(R.id.back);
+
+        back.setOnClickListener(v->{
+            this.finish();
+        });
 
         Intent intent = getIntent();
         ArrayList<String> expenses = intent.getStringArrayListExtra("expenses");
